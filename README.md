@@ -1,3 +1,6 @@
+https://notebooklm.google.com/notebook/547fabe3-1ce7-4d0c-8b5c-ea5036594734
+
+
 # R - The basic concepts
 ## Some simple function terms 
 ```ruby
