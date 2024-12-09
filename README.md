@@ -177,16 +177,53 @@ gl(3, 2, labels = c("A", "B", "C"))  # Tạo biến phân loại có 3 mức, m�
 	- `text(x, y, labels, cex, col, font, ...)`: vị trí cụ thể trong đồ thị
 - `plot(x,y)`: vẽ đồ thị với 2 trục x, y cơ bản
 - `hist` : vẽ đồ thị phổ/xác xuất
+	- Kết hợp với đồ thị đường thể hiện mật độ lines và hàm density (chú ý hàm hist cần phải đặt thông số prob=T)
 - `lines`: vẽ đồ thị đường
 - `pie`: vẽ đồ thị hình tròn
-- `boxplot` : vẽ đồ thị hộp
+- `boxplot(x|x~y,...)` : vẽ đồ thị hộp
 - `barplot` : vẽ đồ thị hình khối
 - `Stars` : vẽ đồ thị hình sao/mạng nhện/radar
 - `qqnorm` : vẽ phân phối quantile quanh biến số x
 - `qqplot` : vẽ phân phối theo quantile theo 2 biến
 - `qqline` : vẽ đường quantile
 - `abline` : vẽ đường thẳng với intercept, slope; đường ngang; đường đứng; theo mô hình hồi quy tuyến tính
-![](attachment/d3b708d50551196af023d7fb7792596b.excalidraw)
+- `scatterplot(y~x|group,...)` (gói `car`)
+![[Graph Type in R.excalidraw|700]]
+## Kiểm định data
+- Quần thể: poppulation, mẫu: sample
+- `shapiro.test`: kiểm tra xem data có PPC không -> P-value < 0,05: không PPC, bác bỏ giả định 
+	- Kiểm định thông qua biểu đồ: `qqnorm`, `qqline`.
+	- Các kiểm định khác (gói `nortest`): `ad.test(x)`, `lillie.test(x)`
+- `<mode>norm(...)`: hàm mô phỏng xác suất với các mode:
+	- `rnorm(n, mean, sd)`: tạo ra một mẫu ngẫu nhiên từ phân phối chuẩn
+			- `n`: số lượng mẫu
+			- `mean`: kỳ vọng (TB mẫu)
+			- `sd`: độ lệch chuẩn
+	- `dnorm(x, mean, sd)` tính mật độ xác suất tại một giá trị `x` cho phân phối chuẩn.
+	- `pnorm(q, mean, sd)`: tính xác suất tích lũy (P(X ≤ `q`)) của phân phối chuẩn.
+	- `qnorm(p, mean, sd)` tìm giá trị tương ứng với một xác suất tích lũy P(X <= x) = `p`
+- **Kiểm định t một mẫu**: Kiểm tra xem mẫu có đại diện cho quần thể hay không. 
+	- Sử dụng hàm `t.test(x, mu=value)`. 
+	- `mu`: mean của quần thể. 
+- Kiểm định t cho 2 mẫu: Kiểm tra sự khác biệt giữa 2 mẫu. 
+	- Hàm `t.test(x ~ y, data=df)`. 
+	- `y`: biến phân lớp (2 giá trị). 
+	- Kết quả trả về bậc tự do (df), p-value, t, khoảng tin cậy 95%. 
+	- Chú ý: Đối với dữ liệu là 2 cột/vector, có thể dùng hàm dạng `t.test(x, y)`
+- Biên tập dữ liệu – Chuyển cột/hàng: 
+	- Sử dụng hàm `melt`, `cast` trong gói `reshape2`. 
+	- Chuyển từ cột thành dòng: `melt(df, id.vars="x, y, ...", measure.vars="x, y, ...") `
+		- `id.vars`: list các cột giữ nguyên (khóa định danh)
+		- `measure.vars`: list cột cần chuyển
+	- Chuyển từ dòng thành cột: `cast(df, id.vars="x, y, ...")`
+- Kiểm định phương sai: 
+	- Hàm `var.test(x ~ y, data=df)`: Kiểm tra sự khác biệt phương sai giữa 2 nhóm. 
+	- Chú ý: Đối với dữ liệu là 2 cột/vector, có thể dùng hàm dạng `var.test(x, y)`. 
+- Kiểm định Wilcoxon: kiểm định phi tham số, được sử dụng cho dữ liệu không theo phân phối chuẩn, nếu p-value > 0.05 thì sự khác biệt của hai mẫu không có ý nghĩa thống kê. 
+	- Hàm `wilcox.test(x ~ y)` hoặc `wilcox.test(x, y)` 
+- Kiểm định t và Wilcoxon cho cặp: Thường được sử dụng cho các phân tích dữ liệu được theo dõi theo thời gian. (Ví dụ: Kiểm định dữ liệu điểm thi lần 1 và lần 2 cho các sinh viên)
+	- Dữ liệu không phải là các biến độc lập nhau. 
+	- Sử dụng các hàm tương tự như trước, với tham số `paired=TRUE`. 
 # Regression Analysis
 ## Linear
 - **Mục đích:** mô hình hóa mối quan hệ giữa các biến xem có AH đến nhau không?
