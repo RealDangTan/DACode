@@ -1,0 +1,108 @@
+---
+title: "De thi hoc phan"
+author: "Le Dang Tan - 11236199"
+date: "10/12/2024"
+output: word_document
+---
+
+
+
+# Câu 2:
+
+```{r}
+data1 <- read.table("data1.txt", header = TRUE)
+filter <- subset(data1, tinh == '17' | tinh == '10' & M1 > 6)
+result2 <- filter[sample(nrow(filter), 8), ]
+print(result2)
+```
+
+
+# Câu 3:
+
+```{r} 
+library(quantmod)
+
+getSymbols(Symbols = "MSFT", src = "yahoo", from = "2024-01-01", to = "2024-01-31")
+chartSeries(MSFT, theme = "white")
+```
+
+# Câu 4:
+
+```{r}
+data31 <- read.table("data31.txt", header = TRUE)
+counter <- table(data31$Group)
+print(counter)
+
+```
+Cả 2 nhóm gồm Nhóm 1 và 2 đều có 30 người 
+
+```{r}
+data31 <- read.table("data31.txt", header = TRUE)
+boxplot(Data ~ Group, data = data31,
+        main = "Phan bo tuoi cua 2 nhom khach hang",
+        xlab = "Cac Nhom",
+        ylab = "Tuoi",
+        col = c("lightblue", "lightgreen"))
+```
+- Nhóm 1: Tuổi tập trung, trung vị gần 50, phạm vi từ 20 đến 70, ít phân tán.  
+- Nhóm 2: Tuổi phân tán hơn, trung vị  gần 40, phạm vi từ 10 đến 70.  
+- So sánh: Nhóm 1 đồng nhất hơn, trung vị cao hơn. Nhóm 2 đa dạng hơn, phạm vi rộng hơn.
+
+# Câu 5:
+
+```{r}
+data41 <- read.table("data41.txt", header = TRUE)
+model <- lm(data41[, 1] ~ ., data = data41)
+result5 <- step(model, direction = "both")
+summary(result5)
+```
+
+Phương trình hồi quy tối ưu là:
+$$
+data41[, 1] = -1.746 \times 10^{-11} + y + 4.634 \times 10^{-16} \cdot a2
+
+$$
+- Biến y có ảnh hưởng mạnh nhất, với hệ số 1.000, nghĩa là khi y tăng 1 đơn vị, data41[, 1] tăng 1 đơn vị.
+- Biến a2 không có ý nghĩa thống kê (do p-value = 0.0976)
+
+# Câu 6:
+
+```{r}
+data51 <- read.table("DATA51.txt", header = TRUE)
+model <- glm(Thangnay ~ Tienmua + Thangqua, data = data51, family = 'binomial')
+summary(model)
+```
+Hàm hồi quy (P) cho trạng thái mua hàng trong tháng hiện tại là:
+$$
+P = -1.817 + 1.746 . 10^{-5} .Tienmua + 0.771 . Thangqua
+$$
+
+
+```{r}
+data51 <- read.table("DATA51.txt", header = TRUE)
+new_data <- data.frame(Tienmua = 50000, Thangqua = 0)
+predict(model, new_data, type = 'response')
+new_data <- data.frame(Tienmua = c(40000, 40000), Thangqua = c(1, 0))
+predict(model, new_data, type = 'response')
+```
+Với hàm hồi quy đã tính được (P), ta thay số vào phương trình với:
+- Tienmua = 50000
+- Thangqua = 0
+Ta tính được P = -0.944
+Với số đó ta tính được xác suất từ công thức đã học thu được xác suất mua hàng dự báo là 28%
+
+
+Khả năng mua hàng của hai khách hàng (1: mua, 2: không mua) là
+Khách 1:
+- Tienmua=40000
+- Thangqua=1
+
+Khách 2:
+- Tienmua=40000
+- Thangqua=0
+
+Từ output ta có khả năng mua hàng của khách 1 là 41,38% và khách 2 là 24,62%
+
+
+
+
